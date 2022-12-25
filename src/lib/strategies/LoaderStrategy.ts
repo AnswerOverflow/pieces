@@ -28,7 +28,7 @@ export class LoaderStrategy<T extends Piece> implements ILoaderStrategy<T> {
 		 * extensions.
 		 */
 		if (Reflect.has(process, Symbol.for('ts-node.register.instance')) || !isNullish(process.env.TS_NODE_DEV)) {
-			this.supportedExtensions.push('.ts', '.cts', '.mts');
+			this.supportedExtensions.push('.ts', '.cts', '.mts', '.tsx');
 			this.filterDtsFiles = true;
 		}
 	}
@@ -39,6 +39,7 @@ export class LoaderStrategy<T extends Piece> implements ILoaderStrategy<T> {
 		if (!this.supportedExtensions.includes(extension)) return null;
 
 		if (this.filterDtsFiles && path.endsWith('.d.ts')) return null;
+		if (path.endsWith('.test')) return null;
 
 		// Retrieve the name of the file, return null if empty.
 		const name = basename(path, extension);
